@@ -1,0 +1,166 @@
+using UnityEngine;
+using UnityEngine.InputSystem.Users;
+using UnityEngine.Tilemaps;
+
+public class EnemyController : MonoBehaviour
+{
+    [SerializeField] private float moveSpeed = 2f;
+    [SerializeField] private Transform player;
+    [SerializeField] private Tilemap tilemap;
+
+    float fallInterval = 0.3f; // 何秒ごとに1マス落ちるか
+    float fallTimer = 0f;
+
+    //private bool isradder, isbar , isgold , isAir, isGround , isGround1 = false;
+
+    [SerializeField] private bool isradder = false;
+    [SerializeField] private bool isbar = false;
+    [SerializeField] private bool isgold = false;
+    [SerializeField] private bool isAir = false;
+    [SerializeField] private bool isGround = false;
+    [SerializeField] private bool isGround1 = false;
+
+    private Rigidbody2D rb;
+    private Vector2 moveDir;
+    private SpriteRenderer sprite;
+    private Animator animator;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        sprite = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
+    }
+
+    void Update()
+    {
+        Move();
+
+
+        if (!isGround && !isradder && !isbar && !isGround1)
+        {
+            isAir = true;
+        }
+        else if (isGround || isradder || isbar || isGround1)
+        {
+            isAir = false;
+        }
+
+        if (isAir)
+        {
+            fallTimer += Time.deltaTime;
+
+            if (fallTimer >= fallInterval)
+            {
+                transform.position += Vector3.down * 1.0f;
+                fallTimer = 0f;
+            }
+        }
+
+        animator.SetBool("InBar", isbar);
+        animator.SetBool("InRadder", isradder);
+        animator.SetBool("InAir", isAir);
+    }
+
+/*    void FixedUpdate()
+    {
+        Vector3 move = new Vector3(moveDir.x, moveDir.y,0f) * moveSpeed * Time.deltaTime;
+        transform.position += move;
+    }*/
+
+    void Move()
+    {
+        //moveDir = Vector2.zero;
+        Vector2 dir = (player.transform.position - transform.position).normalized;
+
+        float mag = dir.magnitude;
+        animator.SetFloat("Speed", mag);
+
+        //回転ｘ
+        if (dir.x > 0f)
+        {
+            //左
+            sprite.flipX = false;
+        }
+        else if (dir.x < 0f)
+        {
+            //右
+            sprite.flipX = true;
+        }
+
+        if (isGround || isGround1 || isbar)
+        {
+            Vector3 move = new Vector3(dir.x, 0, 0f) * moveSpeed * Time.deltaTime;
+            transform.position += move;
+        }
+
+        if (isradder)
+        {
+            Vector3 move = new Vector3(0, dir.y, 0f) * moveSpeed * Time.deltaTime;
+            transform.position += move;
+        }
+
+      
+
+       
+    }
+
+ 
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGround = true;
+        }
+        if (collision.gameObject.CompareTag("Ground1"))
+        {
+            isGround1 = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGround = false;
+        }
+        if (collision.gameObject.CompareTag("Ground1"))
+        {
+            isGround1 = false;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Bar"))
+        {
+            isbar = true;
+        }
+        if (collision.gameObject.CompareTag("Radder"))
+        {
+            isradder = true;
+        }
+        if (collision.gameObject.CompareTag("gold"))
+        {
+            isgold = true;
+            collision.gameObject.SetActive(false);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Bar"))
+        {
+            isbar = false;
+        }
+        if (collision.gameObject.CompareTag("Radder"))
+        {
+            isradder = false;
+        }
+        if (collision.gameObject.CompareTag("gold"))
+        {
+            isgold = false;
+        }
+    }
+}
