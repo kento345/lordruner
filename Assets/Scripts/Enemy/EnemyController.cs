@@ -88,21 +88,23 @@ public class EnemyController : MonoBehaviour
             sprite.flipX = true;
         }
 
+        Vector3 move ;
+
         if (isGround || isGround1 || isbar)
         {
-            Vector3 move = new Vector3(dir.x, 0, 0f) * moveSpeed * Time.deltaTime;
+            move = new Vector3(dir.x, 0, 0f) * moveSpeed * Time.deltaTime;
             transform.position += move;
         }
 
         if (isradder)
         {
-            Vector3 move = new Vector3(0, dir.y, 0f) * moveSpeed * Time.deltaTime;
+            move = new Vector3(0, dir.y, 0f) * moveSpeed * Time.deltaTime;
             transform.position += move;
         }
 
-      
 
        
+
     }
 
  

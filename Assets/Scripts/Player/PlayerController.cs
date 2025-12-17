@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class PlayerController : MonoBehaviour
@@ -25,6 +26,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private SpriteRenderer sprite;
     private Animator animator;
+
+    [SerializeField] private GameController gm;
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -133,6 +136,12 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground1"))
         {
             isGround1 = true;
+        }
+        if(collision.gameObject.CompareTag("Enemy"))
+        {
+            animator.SetTrigger("Dead");
+
+            gm.GameOvere();
         }
     }
 
