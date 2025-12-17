@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 inputVer;
     [SerializeField] private Tilemap tilemap;
 
+    [SerializeField] private Camera came;
+
     float fallInterval = 0.3f; // ‰½•b‚²‚Æ‚É1ƒ}ƒX—Ž‚¿‚é‚©
     float fallTimer = 0f;
 
@@ -88,6 +90,13 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("InBar", isbar);
         animator.SetBool("InRadder", isradder);
         animator.SetBool("InAir", isAir);
+
+        Vector3 viewportPoint = came.WorldToViewportPoint(transform.position);
+        if (viewportPoint.y < 0)
+        {
+           
+        }
+
     }
 
     void Move()
@@ -137,7 +146,7 @@ public class PlayerController : MonoBehaviour
         {
             isGround1 = true;
         }
-        if(collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("Enemy"))
         {
             animator.SetTrigger("Dead");
 
@@ -171,6 +180,7 @@ public class PlayerController : MonoBehaviour
         {
             isgold = true;
             collision.gameObject.SetActive(false);
+            gm.Score(1);
         }
     }
    

@@ -8,18 +8,21 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private Transform player;
     [SerializeField] private Tilemap tilemap;
 
+    [SerializeField] private TileBase targetTile;
+    private CircleCollider2D colide;
+
     float fallInterval = 0.3f; // 何秒ごとに1マス落ちるか
     float fallTimer = 0f;
 
     //private bool isradder, isbar , isgold , isAir, isGround , isGround1 = false;
 
-    [SerializeField] private bool isradder = false;
-    [SerializeField] private bool isbar = false;
-    [SerializeField] private bool isgold = false;
-    [SerializeField] private bool isAir = false;
-    [SerializeField] private bool isGround = false;
-    [SerializeField] private bool isGround1 = false;
-
+   [SerializeField] private bool isradder = false;
+   [SerializeField] private bool isbar = false;
+   [SerializeField] private bool isgold = false;
+   [SerializeField] private bool isAir = false;
+   [SerializeField] private bool isGround = false;
+   [SerializeField] private bool isGround1 = false;
+   
     private Rigidbody2D rb;
     private Vector2 moveDir;
     private SpriteRenderer sprite;
@@ -30,6 +33,7 @@ public class EnemyController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        colide = GetComponent<CircleCollider2D>();
     }
 
     void Update()
@@ -101,10 +105,6 @@ public class EnemyController : MonoBehaviour
             move = new Vector3(0, dir.y, 0f) * moveSpeed * Time.deltaTime;
             transform.position += move;
         }
-
-
-       
-
     }
 
  
@@ -118,6 +118,25 @@ public class EnemyController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground1"))
         {
             isGround1 = true;
+        }
+
+        // Tilemap に当たったか確認
+        if (collision.collider.GetComponent<TilemapCollider2D>() == null)
+            return;
+
+        // 接触した位置（最も信頼できる）
+        Vector3 hitPoint = collision.contacts[0].point;
+
+        // セル座標へ変換
+        Vector3Int cellPos = tilemap.WorldToCell(hitPoint);
+
+        // そのセルの Tile が Tile6 か？
+        if (tilemap.GetTile(cellPos) == targetTile)
+        {
+            colide.isTrigger = true;
+            // セル中央へ瞬間移動
+            Vector3 center = tilemap.GetCellCenterWorld(cellPos);
+            transform.position = center;
         }
     }
 

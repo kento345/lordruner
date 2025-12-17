@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 using UnityEngine.U2D;
 using UnityEngine.UI;
 
@@ -8,6 +9,11 @@ public class GameController : MonoBehaviour
 {
     [SerializeField] private GameObject panel;
     [SerializeField] private SpriteRenderer player;
+
+    [SerializeField] private GameObject goal;
+
+
+    private int count;
 
     private void Start()
     {
@@ -29,5 +35,16 @@ public class GameController : MonoBehaviour
         panel.SetActive(true);
         //yield return new WaitForSeconds(1.5f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void Score(int x)
+    {
+        count += x;
+
+        if(count == 3)
+        {
+           goal.SetActive(true);
+            Debug.Log("100");
+        }
     }
 }
