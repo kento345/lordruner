@@ -22,9 +22,9 @@ public class EnemyController : MonoBehaviour
    [SerializeField] private bool isAir = false;
    [SerializeField] private bool isGround = false;
    [SerializeField] private bool isGround1 = false;
+   [SerializeField] private GameObject hit = null;
    
     private Rigidbody2D rb;
-    private Vector2 moveDir;
     private SpriteRenderer sprite;
     private Animator animator;
 
@@ -38,10 +38,10 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
-        Move();
+        //Move();
 
 
-        if (!isGround && !isradder && !isbar && !isGround1)
+        /*if (!isGround && !isradder && !isbar && !isGround1)
         {
             isAir = true;
         }
@@ -59,23 +59,28 @@ public class EnemyController : MonoBehaviour
                 transform.position += Vector3.down * 1.0f;
                 fallTimer = 0f;
             }
-        }
+        }*/
 
         animator.SetBool("InBar", isbar);
         animator.SetBool("InRadder", isradder);
         animator.SetBool("InAir", isAir);
     }
 
-/*    void FixedUpdate()
+    void FixedUpdate()
     {
-        Vector3 move = new Vector3(moveDir.x, moveDir.y,0f) * moveSpeed * Time.deltaTime;
-        transform.position += move;
-    }*/
+        if(player == null) return;  
 
-    void Move()
-    {
-        //moveDir = Vector2.zero;
         Vector2 dir = (player.transform.position - transform.position).normalized;
+        
+        if(isGround||isGround1||isbar)
+        {
+            dir.y = 0f;
+        }
+        if (isradder)
+        {
+            dir.x = 0f;
+        }
+        rb.AddForce(dir * moveSpeed);
 
         float mag = dir.magnitude;
         animator.SetFloat("Speed", mag);
@@ -91,23 +96,9 @@ public class EnemyController : MonoBehaviour
             //右
             sprite.flipX = true;
         }
-
-        Vector3 move ;
-
-        if (isGround || isGround1 || isbar)
-        {
-            move = new Vector3(dir.x, 0, 0f) * moveSpeed * Time.deltaTime;
-            transform.position += move;
-        }
-
-        if (isradder)
-        {
-            move = new Vector3(0, dir.y, 0f) * moveSpeed * Time.deltaTime;
-            transform.position += move;
-        }
     }
 
- 
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -154,13 +145,25 @@ public class EnemyController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+      /*  if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGround = true;
+            hit = collision.gameObject;
+        }
+        if (collision.gameObject.CompareTag("Ground1"))
+        {
+            isGround1 = true;
+            hit = collision.gameObject;
+        }*/
         if (collision.gameObject.CompareTag("Bar"))
         {
             isbar = true;
+            hit = collision.gameObject;
         }
         if (collision.gameObject.CompareTag("Radder"))
         {
             isradder = true;
+            hit = collision.gameObject;
         }
         if (collision.gameObject.CompareTag("gold"))
         {
@@ -171,13 +174,25 @@ public class EnemyController : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+   /*     if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGround = false;
+            hit = null;
+        }
+        if (collision.gameObject.CompareTag("Ground1"))
+        {
+            isGround1 = false;
+            hit = null;
+        }*/
         if (collision.gameObject.CompareTag("Bar"))
         {
             isbar = false;
+            hit = null;
         }
         if (collision.gameObject.CompareTag("Radder"))
         {
             isradder = false;
+            hit = null;
         }
         if (collision.gameObject.CompareTag("gold"))
         {

@@ -27,13 +27,13 @@ public class GameController : MonoBehaviour
 
     private IEnumerator GameOverCoroutine()
     {
-        for(int i = 0; i < 2; i++)
+        for(int i = 0; i < 3; i++)
         {
             player.enabled = !player.enabled;
             yield return new WaitForSeconds(0.2f);
         }
         panel.SetActive(true);
-        //yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.5f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 

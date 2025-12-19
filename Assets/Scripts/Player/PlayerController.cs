@@ -91,11 +91,11 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("InRadder", isradder);
         animator.SetBool("InAir", isAir);
 
-        Vector3 viewportPoint = came.WorldToViewportPoint(transform.position);
+/*        Vector3 viewportPoint = came.WorldToViewportPoint(transform.position);
         if (viewportPoint.y < 0)
         {
            
-        }
+        }*/
 
     }
 
