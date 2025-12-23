@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 113579857}
   m_Layer: 0
   m_Name: Wall1
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1945,15 +1945,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5570051109004522499, guid: 6e86da327a5d542b0b59ab4ad7a727a2, type: 3}
       propertyPath: m_Radius
-      value: 0.4842404
+      value: 0.4698878
       objectReference: {fileID: 0}
     - target: {fileID: 5570051109004522499, guid: 6e86da327a5d542b0b59ab4ad7a727a2, type: 3}
       propertyPath: m_Offset.x
-      value: 0
+      value: 0.022343397
       objectReference: {fileID: 0}
     - target: {fileID: 5570051109004522499, guid: 6e86da327a5d542b0b59ab4ad7a727a2, type: 3}
       propertyPath: m_Offset.y
-      value: 0.0026265383
+      value: -0.058175743
       objectReference: {fileID: 0}
     - target: {fileID: 5570051109004522499, guid: 6e86da327a5d542b0b59ab4ad7a727a2, type: 3}
       propertyPath: m_IsTrigger
@@ -1967,6 +1967,10 @@ PrefabInstance:
       propertyPath: tilemap
       value: 
       objectReference: {fileID: 409110112}
+    - target: {fileID: 6236554425843036543, guid: 6e86da327a5d542b0b59ab4ad7a727a2, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 3606174846411479324, guid: 6e86da327a5d542b0b59ab4ad7a727a2, type: 3}
@@ -1985,7 +1989,7 @@ GameObject:
   - component: {fileID: 792620409}
   m_Layer: 0
   m_Name: Wall3
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2762,7 +2766,7 @@ GameObject:
   - component: {fileID: 951371723}
   m_Layer: 0
   m_Name: Wall2
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
