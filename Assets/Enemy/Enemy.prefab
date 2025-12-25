@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5375810675348122856}
   - component: {fileID: 7289317941536514082}
-  - component: {fileID: 6236554425843036543}
   - component: {fileID: 4545657439787419581}
   - component: {fileID: 3084792201655823394}
   - component: {fileID: 5570051109004522499}
@@ -92,28 +91,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6236554425843036543
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2150883203298891644}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43f92ac30b755c84bacdae6f97dd4798, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 4
-  player: {fileID: 0}
-  tilemap: {fileID: 0}
-  targetTile: {fileID: 11400000, guid: a9d8f55bcb443de4ca119a3693cd3326, type: 2}
-  isradder: 0
-  isbar: 0
-  isgold: 0
-  isAir: 0
-  isGround: 0
-  isGround1: 0
 --- !u!95 &4545657439787419581
 Animator:
   serializedVersion: 7
@@ -209,7 +186,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3369021138898037851}
   - component: {fileID: 3391188858839733832}
-  - component: {fileID: 7374137163910079563}
+  - component: {fileID: 4638097032962502191}
   m_Layer: 0
   m_Name: Colide
   m_TagString: Untagged
@@ -278,7 +255,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &7374137163910079563
+--- !u!114 &4638097032962502191
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -287,12 +264,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 3606174846411479324}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b84f5dcc0b41b44ab4b171e855b7e38, type: 3}
+  m_Script: {fileID: 11500000, guid: 08bd20e03abe3dc47a580bfabf74206e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isradder: 0
-  isbar: 0
-  isgold: 0
-  isAir: 0
-  isGround: 0
-  isGround1: 0
+  onLadder: 0
+  onGropund: 0
