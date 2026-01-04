@@ -28,19 +28,21 @@ public class Enemy : MonoBehaviour
     [SerializeField] Tilemap ladderMap;
     [SerializeField] Tilemap barMap;
 
+    [SerializeField] private TileBase holeTile;
+
     Action lastAction = Action.Left;
     Vector3 moveTarget;
-    bool isMoving = false;
+    [SerializeField] bool isMoving = false;
 
     float fallInterval = 0.3f;
     float fallTimer = 0f;
-    bool isAir = false;
-
+    [SerializeField] bool isAir = false;
+    [SerializeField] private bool isHole = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
@@ -48,18 +50,22 @@ public class Enemy : MonoBehaviour
     {
         Vector2Int enemy = WorldToGrid(transform.position);
 
-        isAir = IsAir(enemy);
-
-        if (isAir)
+        if (IsHole(enemy))
         {
-            fallTimer += Time.deltaTime;
+            isHole = true;
+           /* isMoving = false;
+            isAir = false;*/
+            //fallTimer = 0f;
 
-            if (fallTimer >= fallInterval)
-            {
-                HandleFall(enemy);
-                fallTimer = 0f;
-            }
-            return;
+            // holeTile の上にスナップして完全停止
+            transform.position = GridToWorld(enemy + Vector2Int.down);
+            return; // ← holeTile の場合はそれ以上処理しない
+        }
+
+        if(isHole)
+        {
+            isMoving = false;
+            isAir = false;
         }
 
 
@@ -72,16 +78,31 @@ public class Enemy : MonoBehaviour
             );
 
             if (Vector3.Distance(transform.position, moveTarget) < 0.01f)
+            {
                 isMoving = false;
+                transform.position = moveTarget;
+            }
 
-            return; // ← ここ超重要
+            return;
+        }
+
+        isAir = IsAir(enemy);
+
+        if (isAir)
+        {
+            fallTimer += Time.deltaTime;
+            if (fallTimer >= fallInterval)
+            {
+                HandleFall(enemy);
+                fallTimer = 0f;
+            }
+            return;
         }
 
 
 
 
         Vector2Int playerPos = WorldToGrid(player.position);
-
 
         List<(Action action, Vector2Int pos)> candidates = new();
 
@@ -137,6 +158,7 @@ public class Enemy : MonoBehaviour
         }
 
         lastAction = best;
+
         Move(best);
     }
 
@@ -158,6 +180,7 @@ public class Enemy : MonoBehaviour
 
     void Move(Action a)
     {
+        if(isHole) return;
         Vector2Int delta = a switch
         {
             Action.Left => Vector2Int.left,
@@ -185,6 +208,11 @@ public class Enemy : MonoBehaviour
             return CellType.Bar;
 
         return CellType.Empty;
+    }
+
+    bool IsHole(Vector2Int pos)
+    {
+       return groundMap.GetTile((Vector3Int)pos + Vector3Int.down) == holeTile;
     }
 
     bool CanMoveLeft(Vector2Int pos)
@@ -234,6 +262,8 @@ public class Enemy : MonoBehaviour
     }
     bool IsAir(Vector2Int pos)
     {
+        if (isHole) return false;
+
         CellType current = GetCell(pos);
         CellType below = GetCell(pos + Vector2Int.down);
 
@@ -246,6 +276,7 @@ public class Enemy : MonoBehaviour
     }
     bool HasFooting(Vector2Int pos)
     {
+        if (isHole) return false;
         CellType below = GetCell(pos + Vector2Int.down);
         CellType current = GetCell(pos);
 
@@ -255,8 +286,11 @@ public class Enemy : MonoBehaviour
             current == CellType.Bar ||
             current == CellType.Ladder;
     }
+   
     void HandleFall(Vector2Int pos)
     {
+        if (isHole) return ;
+
         Vector2Int belowPos = pos + Vector2Int.down;
         CellType below = GetCell(belowPos);
 
