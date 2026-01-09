@@ -30,14 +30,15 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private TileBase holeTile;
 
+
     Action lastAction = Action.Left;
     Vector3 moveTarget;
-    [SerializeField] bool isMoving = false;
+    bool isMoving = false;
 
     float fallInterval = 0.3f;
     float fallTimer = 0f;
-    [SerializeField] bool isAir = false;
-    [SerializeField] private bool isHole = false;
+    bool isAir = false;
+    bool isHole = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -53,12 +54,14 @@ public class Enemy : MonoBehaviour
         if (IsHole(enemy))
         {
             isHole = true;
-           /* isMoving = false;
-            isAir = false;*/
-            //fallTimer = 0f;
+            float t = 10;
 
             // holeTile の上にスナップして完全停止
             transform.position = GridToWorld(enemy + Vector2Int.down);
+
+            t -= Time.deltaTime;
+            //if()
+
             return; // ← holeTile の場合はそれ以上処理しない
         }
 
@@ -106,7 +109,7 @@ public class Enemy : MonoBehaviour
 
         List<(Action action, Vector2Int pos)> candidates = new();
 
-        int dy = playerPos.y - enemy.y;
+        //int dy = playerPos.y - enemy.y;
         if (playerPos.y > enemy.y && CanMoveUp(enemy))
         {
             Move(Action.Up);

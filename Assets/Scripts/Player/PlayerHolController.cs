@@ -13,6 +13,10 @@ public class PlayerHolController : MonoBehaviour
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private TileBase[] tiles;
 
+    [SerializeField] private TileBase tile;
+
+    private float t = 5f;
+
     private float timer;
     private int tileIndex;
 
@@ -53,7 +57,7 @@ public class PlayerHolController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isPreseZ)
+        if (isPreseZ )
         {
             ChangeTile(obj1.transform.position);
         }
@@ -74,11 +78,28 @@ public class PlayerHolController : MonoBehaviour
             if (tilemap.HasTile(cell))
             {
                 tilemap.SetTile(cell, tiles[tileIndex]);
-                if(tileIndex < tiles.Length - 1)
+                if (tileIndex < tiles.Length - 1)
                 {
                     tileIndex = tileIndex + 1;
                 }
+                if(tileIndex > tiles.Length)
+                {
+                    t -= Time.deltaTime;
+                    if(t <= 0.1f)
+                    {
+                        t = 0f;
+
+                    }
+                }
             }
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject == tile)
+        {
+            Debug.Log("100");
         }
     }
 }

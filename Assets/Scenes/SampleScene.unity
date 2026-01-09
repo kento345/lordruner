@@ -2912,9 +2912,6 @@ MonoBehaviour:
   ladderMap: {fileID: 331300497}
   barMap: {fileID: 2145789328}
   holeTile: {fileID: 11400000, guid: a9d8f55bcb443de4ca119a3693cd3326, type: 2}
-  isMoving: 0
-  isAir: 0
-  isHole: 0
 --- !u!1001 &1785045208
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3420,6 +3417,10 @@ PrefabInstance:
       propertyPath: obj2
       value: 
       objectReference: {fileID: 1626680486}
+    - target: {fileID: 3261985599618764011, guid: 464c0140e05fe4b80ae8818739111208, type: 3}
+      propertyPath: tile
+      value: 
+      objectReference: {fileID: 11400000, guid: a9d8f55bcb443de4ca119a3693cd3326, type: 2}
     - target: {fileID: 3261985599618764011, guid: 464c0140e05fe4b80ae8818739111208, type: 3}
       propertyPath: tilemap
       value: 

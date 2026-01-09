@@ -134,7 +134,7 @@ public class PlayerController : MonoBehaviour
 
         transform.position = cellCenter;
     }
- 
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
