@@ -9,21 +9,11 @@ public class PlayerController : MonoBehaviour
     private Vector2 inputVer;
     [SerializeField] private Tilemap tilemap;
 
-    [SerializeField] private Camera came;
-
     float fallInterval = 0.3f; // ‰½•b‚²‚Æ‚É1ƒ}ƒX—Ž‚¿‚é‚©
     float fallTimer = 0f;
 
     private bool isradder, isbar, isgold, isAir, isGround, isGround1 = false;
-   /* private bool isradder = false;
-    private bool isbar = false;
-    private bool isgold = false;
-    private bool isAir = false;
-    private bool isGround = false;
-    private bool isGround1 = false;*/
-    
-    //[SerializeField] private Tile goaldTile; 
-
+ 
     //---------
     private Rigidbody2D rb;
     private SpriteRenderer sprite;
@@ -182,6 +172,10 @@ public class PlayerController : MonoBehaviour
             animator.SetTrigger("Dead");
 
             gm.GameOvere();
+        }
+        if (collision.gameObject.CompareTag("wall"))
+        {
+            SceneManager.LoadScene("End");
         }
     }
    
