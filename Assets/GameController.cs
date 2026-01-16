@@ -14,13 +14,13 @@ public class GameController : MonoBehaviour
 
 
 
-
     private int count;
 
     private void Start()
     {
         panel.SetActive(false);
     }
+
 
     public void GameOvere()
     {

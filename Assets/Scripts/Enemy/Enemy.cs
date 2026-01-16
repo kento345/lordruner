@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Hierarchy;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -38,17 +39,23 @@ public class Enemy : MonoBehaviour
     float fallInterval = 0.3f;
     float fallTimer = 0f;
 
-    float t = 10;
+    float t = 5;
     Vector2Int holePos;
    [SerializeField] TileBase originTile;
+
+    GameObject gorld;
 
     bool isAir = false;
     bool isHole = false;
 
+    private Animator animator;
+    private Rigidbody2D rb;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -73,6 +80,7 @@ public class Enemy : MonoBehaviour
                 transform.position = GridToWorld(exitPos);
 
                 lastAction = Action.Left;
+                t = 10;
             }
             return;
         }
@@ -92,6 +100,11 @@ public class Enemy : MonoBehaviour
             // Hole ÇÃíÜÇ÷
             transform.position = GridToWorld(holePos);
 
+            if(gorld == null) {return;}
+
+            gorld.transform.position = GridToWorld(holePos + Vector2Int.up);
+            gorld.SetActive(true);
+
             return; // Å© holeTile ÇÃèÍçáÇÕÇªÇÍà»è„èàóùÇµÇ»Ç¢
         }
 
@@ -100,6 +113,7 @@ public class Enemy : MonoBehaviour
 
         if (isMoving)
         {
+            
             transform.position = Vector3.MoveTowards(
                 transform.position,
                 moveTarget,
@@ -313,7 +327,7 @@ public class Enemy : MonoBehaviour
         return
             below == CellType.Ground ||
             below == CellType.Ladder ||
-            current == CellType.Bar ||
+            current == CellType.Bar  ||
             current == CellType.Ladder;
     }
    
@@ -361,5 +375,14 @@ public class Enemy : MonoBehaviour
     void SnapToCellCenter(Vector2Int pos)
     {
         transform.position = GridToWorld(pos);
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("gold"))
+        {
+            gorld = collision.gameObject;
+            collision.gameObject.SetActive(false);
+        }
     }
 }

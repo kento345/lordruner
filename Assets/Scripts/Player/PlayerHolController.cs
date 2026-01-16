@@ -20,18 +20,26 @@ public class PlayerHolController : MonoBehaviour
     private float timer;
     private int tileIndex;
 
+    bool isDig = false;
+
+    private SpriteRenderer sprite;
+
+    private Animator anime;
+
     public void OnRightHole(InputAction.CallbackContext context)
     {
         if (context.performed && tilemap != null)
         {
             isPreseX = true;
-
+            isDig = true;
+            sprite.flipX = false;
         }
         if (context.canceled)
         {
             isPreseX = false;
             timer = 0f;
             tileIndex = 0;
+            isDig = false;
         }
     }
     public void OnLeftHole(InputAction.CallbackContext context)
@@ -39,19 +47,23 @@ public class PlayerHolController : MonoBehaviour
         if (context.performed && tilemap != null)
         {
             isPreseZ = true;
+            isDig = true;
+            sprite.flipX = true;
         }
         if (context.canceled)
         {
             isPreseZ = false;
             timer = 0f;
             tileIndex = 0;
+            isDig = false;
         }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        anime = GetComponent<Animator>();
+        sprite = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -65,6 +77,8 @@ public class PlayerHolController : MonoBehaviour
         {
             ChangeTile(obj2.transform.position);
         }
+
+        anime.SetBool("InDig", isDig);
     }
     void ChangeTile(Vector3 worldPos)
     {

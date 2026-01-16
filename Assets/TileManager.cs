@@ -6,29 +6,68 @@ using UnityEngine.Tilemaps;
 
 public class TileManager : MonoBehaviour
 {
-    [SerializeField] private TileBase hole;
-    [SerializeField] private TileBase tile;
+    public Tilemap tilemap;
+    public TileBase temporaryTile; // 置いた瞬間のタイル
+    public TileBase finalTile;     // 数秒後に変わる姿
+    public float changeDelay = 3.0f;
 
-    private float t = 5f;
+    [SerializeField] private LayerMask enemyLayer;
+    [SerializeField] private GameObject enemy;
+    [SerializeField] private Transform pos;
 
-    Tilemap tilemap;
-
-    private void Awake()
+    private void OnEnable()
     {
-        tilemap = GetComponent<Tilemap>();
+        Tilemap.tilemapTileChanged += OnTilemapChanged;
     }
-    public void RestoreHole(Vector3Int cell)
+    private void OnDisable()
     {
-        StartCoroutine(RestoreCoroutine(cell));
+        Tilemap.tilemapTileChanged -= OnTilemapChanged;
     }
 
-    IEnumerator RestoreCoroutine(Vector3Int cell)
+    IEnumerator TileChangeTimer(Vector3Int position)
     {
-        yield return new WaitForSeconds(t);
+        // 指定した秒数だけ待つ
+        yield return new WaitForSeconds(changeDelay);
 
-        if (tilemap.GetTile(cell) == tile)
+        // 変更時に「まだそのタイルがそこにあるか」を確認（上書き消去対策）
+        if (tilemap.GetTile(position) == temporaryTile)
         {
-            tilemap.SetTile(cell, tile);
+            tilemap.SetTile(position, finalTile);
+
+            KillEnemyAtPosition(position);
+        }
+    }
+
+    void KillEnemyAtPosition(Vector3Int cellPosition)
+    {
+        // セルの中心のワールド座標を取得
+        Vector3 worldPos = tilemap.GetCellCenterWorld(cellPosition);
+
+        // タイルのサイズ（通常1.0x1.0）より少し小さい範囲でEnemyを検知
+        // 引数: (中心点, サイズ, 角度, レイヤー)
+        Collider2D enemyCollider = Physics2D.OverlapBox(worldPos, new Vector2(0.8f, 0.8f), 0, enemyLayer);
+
+        if (enemyCollider != null)
+        {
+            // Enemyオブジェクトを破棄
+            Destroy(enemyCollider.gameObject);
+
+            //Instantiate(enemy, pos);
+            
+            Debug.Log($"Enemy at {cellPosition} was destroyed!");
+        }
+    }
+
+    void OnTilemapChanged(Tilemap map, Tilemap.SyncTile[] syncTiles)
+    {
+        if (map != tilemap) { return; }
+
+        foreach (var syncTile in syncTiles)
+        {
+            if(syncTile.tile == temporaryTile)
+            {
+                StartCoroutine(TileChangeTimer(syncTile.position));
+            }
         }
     }
 

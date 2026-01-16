@@ -80,13 +80,6 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("InBar", isbar);
         animator.SetBool("InRadder", isradder);
         animator.SetBool("InAir", isAir);
-
-/*        Vector3 viewportPoint = came.WorldToViewportPoint(transform.position);
-        if (viewportPoint.y < 0)
-        {
-           
-        }*/
-
     }
 
     void Move()
@@ -164,7 +157,8 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("gold"))
         {
             isgold = true;
-            collision.gameObject.SetActive(false);
+            //collision.gameObject.SetActive(false);
+            Destroy(collision.gameObject);
             gm.Score(1);
         }
         if (collision.gameObject.CompareTag("Enemy"))
